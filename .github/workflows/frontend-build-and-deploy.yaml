@@ -1,0 +1,29 @@
+name: Build And Deploy to Frontend
+
+on:
+  push:
+    branches:
+      - develop
+    paths:
+      - "apps/frontend/**"
+  workflow_dispatch:
+
+env:
+  # aws
+  AWS_REGION: ap-northeast-1
+  AWS_ROLE_ARN: arn:aws:iam::${{ vars.DEVELOP_AWS_ACCOUNT }}:role/github-actions
+
+jobs:
+  build:
+    name: Frontend Build
+    runs-on: ubuntu-latest
+    # environment: develop
+    permissions: 
+      id-token: write
+      contents: read
+    steps:
+      - name: Checkout
+        uses: actions/checkout@v4.2.2
+        with:
+            sparse-checkout: |
+              apps/frontend
